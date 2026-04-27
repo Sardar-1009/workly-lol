@@ -8,6 +8,7 @@ import Dashboard from './pages/Dashboard/Dashboard';
 import Vacancies from './pages/Vacancies/Vacancies';
 import Candidates from './pages/Candidates/Candidates';
 import Messages from './pages/Messages/Messages';
+import Profile from './pages/Profile/Profile';
 import Layout from './components/Layout/Layout';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
@@ -64,6 +65,7 @@ function App() {
             <Route path="/vacancies" element={<Vacancies />} />
             <Route path="/candidates" element={<Candidates />} />
             <Route path="/messages" element={<Messages />} />
+            <Route path="/profile" element={<Profile />} />
           </Route>
 
           {/* Fallback route */}

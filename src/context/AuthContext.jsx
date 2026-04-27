@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }) => {
         email: user.email,
         companyName: companyData.companyName,
         description: companyData.description || '',
-        logoUrl: companyData.logoUrl || '',
+        logo: companyData.logo || '',
         createdAt: new Date().toISOString()
       };
       

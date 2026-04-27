@@ -17,9 +17,10 @@ const Vacancies = () => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    requirements: '',
+    skills: '',
     salary: '',
-    location: ''
+    location: '',
+    workType: 'full-time'
   });
 
   const fetchVacancies = async () => {
@@ -56,13 +57,13 @@ const Vacancies = () => {
     try {
       await addDoc(collection(db, 'vacancies'), {
         ...formData,
-        requirements: formData.requirements.split('\\n'),
+        skills: formData.skills.split(',').map(s => s.trim()).filter(Boolean),
         employerId: currentUser.uid,
         status: 'active',
         createdAt: serverTimestamp()
       });
       setShowModal(false);
-      setFormData({ title: '', description: '', requirements: '', salary: '', location: '' });
+      setFormData({ title: '', description: '', skills: '', salary: '', location: '', workType: 'full-time' });
       fetchVacancies();
     } catch (error) {
       console.error("Error creating vacancy: ", error);
@@ -127,6 +128,11 @@ const Vacancies = () => {
                       <DollarSign size={14} /> {vacancy.salary}
                     </div>
                   )}
+                  {vacancy.workType && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                      <Briefcase size={14} /> {vacancy.workType.replace('-', ' ')}
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
@@ -139,9 +145,13 @@ const Vacancies = () => {
         <div style={{
           position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, 
           backgroundColor: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 50
+          display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 50,
+          padding: '1rem'
         }}>
-          <div className="glass-panel animate-fade-in" style={{ width: '100%', maxWidth: '600px', backgroundColor: 'var(--bg-secondary)', padding: 0 }}>
+          <div className="glass-panel animate-fade-in" style={{ 
+            width: '100%', maxWidth: '600px', backgroundColor: 'var(--bg-secondary)', padding: 0,
+            maxHeight: '90vh', overflowY: 'auto'
+          }}>
             <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <h2 style={{ fontSize: '1.25rem', margin: 0 }}>Create Vacancy</h2>
               <button onClick={() => setShowModal(false)} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}>
@@ -158,7 +168,26 @@ const Vacancies = () => {
               <div className="grid grid-cols-2">
                 <div className="form-group">
                   <label className="form-label">Location (Optional)</label>
-                  <input type="text" name="location" value={formData.location} onChange={handleChange} placeholder="e.g. Remote, or New York" />
+                  <select 
+                    name="location" 
+                    value={formData.location} 
+                    onChange={handleChange} 
+                    className="form-control" 
+                    style={{ padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-main)', color: 'var(--text-main)', width: '100%', outline: 'none' }}
+                  >
+                    <option value="">Select city...</option>
+                    <option value="Бишкек">Бишкек</option>
+                    <option value="Ош">Ош</option>
+                    <option value="Джалал-Абад">Джалал-Абад</option>
+                    <option value="Каракол">Каракол</option>
+                    <option value="Алматы">Алматы</option>
+                    <option value="Астана">Астана</option>
+                    <option value="Ташкент">Ташкент</option>
+                    <option value="Москва">Москва</option>
+                    <option value="Санкт-Петербург">Санкт-Петербург</option>
+                    <option value="Казань">Казань</option>
+                    <option value="Удаленно">Удаленно (Remote)</option>
+                  </select>
                 </div>
                 <div className="form-group">
                   <label className="form-label">Salary Range (Optional)</label>
@@ -167,13 +196,24 @@ const Vacancies = () => {
               </div>
 
               <div className="form-group">
+                <label className="form-label">Work Type</label>
+                <select name="workType" value={formData.workType} onChange={handleChange} className="form-control" style={{ padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-main)', color: 'var(--text-main)', width: '100%', outline: 'none' }}>
+                  <option value="full-time">Full-time</option>
+                  <option value="part-time">Part-time</option>
+                  <option value="contract">Contract</option>
+                  <option value="freelance">Freelance</option>
+                  <option value="internship">Internship</option>
+                </select>
+              </div>
+
+              <div className="form-group">
                 <label className="form-label">Description</label>
                 <textarea name="description" required value={formData.description} onChange={handleChange} placeholder="Describe the role..." style={{ minHeight: '100px' }} />
               </div>
 
               <div className="form-group">
-                <label className="form-label">Requirements (one per line)</label>
-                <textarea name="requirements" required value={formData.requirements} onChange={handleChange} placeholder="- 4+ years of React&#10;- Experience with Firebase..." style={{ minHeight: '100px' }} />
+                <label className="form-label">Skills (comma separated)</label>
+                <textarea name="skills" required value={formData.skills} onChange={handleChange} placeholder="React, Node.js, Firebase, UI/UX" style={{ minHeight: '60px' }} />
               </div>
 
               <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1rem' }}>

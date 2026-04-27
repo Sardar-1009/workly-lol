@@ -1,7 +1,7 @@
 import React from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { LayoutDashboard, Briefcase, Users, MessageSquareText, LogOut, Loader2 } from 'lucide-react';
+import { LayoutDashboard, Briefcase, Users, MessageSquareText, LogOut, Loader2, User } from 'lucide-react';
 
 const Layout = () => {
   const { logout } = useAuth();
@@ -42,6 +42,10 @@ const Layout = () => {
             <NavLink to="/messages" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
               <MessageSquareText size={20} />
               <span>Messages</span>
+            </NavLink>
+            <NavLink to="/profile" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+              <User size={20} />
+              <span>Profile</span>
             </NavLink>
           </nav>
         </div>
