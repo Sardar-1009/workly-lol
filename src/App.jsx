@@ -20,7 +20,7 @@ const ProtectedRoute = ({ children }) => {
     return (
       <div className="auth-container">
         <div className="animate-fade-in" style={{ fontSize: '1.2rem', color: 'var(--accent-primary)' }}>
-          Loading your workspace...
+          Загрузка вашего рабочего пространства...
         </div>
       </div>
     );

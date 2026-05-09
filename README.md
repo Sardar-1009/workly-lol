@@ -1,16 +1,51 @@
-# React + Vite
+# Workly - Employer App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Веб-приложение для работодателей, позволяющее создавать и управлять вакансиями, а также находить подходящих кандидатов. Разработано с использованием React, Vite и Firebase.
 
-Currently, two official plugins are available:
+## Особенности
+- **Авторизация и Регистрация:** Интеграция с Firebase Authentication.
+- **Управление вакансиями:** Создание, редактирование и удаление вакансий.
+- **Профили кандидатов:** Просмотр откликов на вакансии.
+- **Риалтайм база данных:** Интеграция с Firestore.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Требования
+- Node.js (v18 или выше)
+- NPM или Yarn
 
-## React Compiler
+## Установка и запуск
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+1. **Клонируйте репозиторий (если еще не сделали этого):**
+   ```bash
+   git clone <url_репозитория>
+   cd EmployerApp
+   ```
 
-## Expanding the ESLint configuration
+2. **Установите зависимости:**
+   ```bash
+   npm install
+   ```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+3. **Настройте переменные окружения:**
+   Убедитесь, что у вас есть корректный файл конфигурации Firebase `src/config/firebase.js` с нужными ключами (или `.env` файл).
+
+4. **Запустите проект в режиме разработки:**
+   ```bash
+   npm run dev
+   ```
+   Приложение будет доступно по адресу `http://localhost:5173`.
+
+## Сборка для продакшена
+
+Для сборки оптимизированной версии приложения выполните:
+```bash
+npm run build
+```
+Готовые файлы будут находиться в папке `dist`.
+
+## Тестирование
+В проекте настроены модульные тесты для бизнес-логики (usecase) и управления состоянием (bloc-подобный подход).
+
+Для запуска тестов:
+```bash
+npm run test
+```

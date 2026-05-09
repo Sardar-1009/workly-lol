@@ -97,19 +97,19 @@ const Dashboard = () => {
     <div className="animate-fade-in">
       <div className="page-header">
         <div>
-          <h1 className="page-title">Dashboard</h1>
-          <p style={{ color: 'var(--text-muted)' }}>Overview of your recruitment progress</p>
+          <h1 className="page-title">Дашборд</h1>
+          <p style={{ color: 'var(--text-muted)' }}>Обзор процесса найма</p>
         </div>
         <button onClick={handleFillApplications} className="btn btn-primary">
-          Restore Applications
+          Сгенерировать отклики
         </button>
       </div>
 
       <div className="grid grid-cols-2" style={{ marginTop: '2rem', gap: '1.5rem' }}>
-        <StatCard icon={Briefcase} label="Active Vacancies" value={stats.vacancies} color="var(--accent-primary)" loading={loading} />
-        <StatCard icon={Users} label="Total Applicants" value={stats.candidates} color="#7c3aed" loading={loading} />
-        <StatCard icon={MessageSquare} label="Active Chats" value={stats.chats} color="#0ea5e9" loading={loading} />
-        <StatCard icon={TrendingUp} label="Total Posted" value={stats.vacancies} color="#f59e0b" loading={loading} />
+        <StatCard icon={Briefcase} label="Активные вакансии" value={stats.vacancies} color="var(--accent-primary)" loading={loading} />
+        <StatCard icon={Users} label="Всего кандидатов" value={stats.candidates} color="#7c3aed" loading={loading} />
+        <StatCard icon={MessageSquare} label="Активные чаты" value={stats.chats} color="#0ea5e9" loading={loading} />
+        <StatCard icon={TrendingUp} label="Опубликовано" value={stats.vacancies} color="#f59e0b" loading={loading} />
       </div>
     </div>
   );

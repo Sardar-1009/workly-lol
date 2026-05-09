@@ -1,13 +1,45 @@
 <!doctype html>
-<html lang="en">
+<html lang="ru">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>employer-app</title>
+    <title>Workly - Панель работодателя</title>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <style>
+        .initial-loader {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          height: 100vh;
+          background-color: #f8fafc;
+          font-family: system-ui, -apple-system, sans-serif;
+        }
+        .spinner {
+          width: 40px;
+          height: 40px;
+          border: 4px solid #e2e8f0;
+          border-top-color: #3b82f6;
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
+          margin-bottom: 16px;
+        }
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+        .loading-text {
+          color: #64748b;
+          font-weight: 500;
+        }
+      </style>
+      <div class="initial-loader">
+        <div class="spinner"></div>
+        <div class="loading-text">Загрузка Workly...</div>
+      </div>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

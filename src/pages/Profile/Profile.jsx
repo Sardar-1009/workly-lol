@@ -89,7 +89,7 @@ const Profile = () => {
       await setDoc(doc(db, 'employers', currentUser.uid), updateData, { merge: true });
       
       setProfileData(prev => ({ ...prev, ...updateData }));
-      setSuccessMsg('Profile updated successfully!');
+      setSuccessMsg('Профиль успешно обновлен!');
       setTimeout(() => setSuccessMsg(''), 3000);
       
     } catch (error) {
@@ -112,8 +112,8 @@ const Profile = () => {
     <div className="animate-fade-in relative h-full flex flex-col">
       <div className="page-header">
         <div>
-          <h1 className="page-title">Company Profile</h1>
-          <p style={{ color: 'var(--text-muted)' }}>Manage your company details and branding</p>
+          <h1 className="page-title">Профиль компании</h1>
+          <p style={{ color: 'var(--text-muted)' }}>Управляйте данными вашей компании</p>
         </div>
       </div>
 
@@ -145,39 +145,39 @@ const Profile = () => {
               <div>
                 <label className="btn btn-secondary" style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   <Upload size={18} />
-                  Upload Logo
+                  Загрузить логотип
                   <input type="file" accept="image/*" onChange={handleFileChange} style={{ display: 'none' }} />
                 </label>
-                <p style={{ margin: '0.5rem 0 0', fontSize: '0.8rem', color: 'var(--text-muted)' }}>Recommended: Square PNG or JPG</p>
+                <p style={{ margin: '0.5rem 0 0', fontSize: '0.8rem', color: 'var(--text-muted)' }}>Рекомендуется: Квадратный PNG или JPG</p>
               </div>
             </div>
 
             <hr style={{ border: 'none', borderTop: '1px solid var(--border-color)', margin: '0.5rem 0' }} />
 
             <div className="form-group">
-              <label className="form-label">Email Address (Read Only)</label>
+              <label className="form-label">Почта (Только для чтения)</label>
               <input type="email" value={currentUser?.email || profileData.email || ''} disabled style={{ opacity: 0.7 }} />
             </div>
 
             <div className="form-group">
-              <label className="form-label">Company Name</label>
+              <label className="form-label">Название компании</label>
               <input 
                 type="text" 
                 name="companyName" 
                 required 
                 value={profileData.companyName} 
                 onChange={handleChange} 
-                placeholder="e.g. Acme Corp" 
+                placeholder="напр. Acme Corp" 
               />
             </div>
 
             <div className="form-group">
-              <label className="form-label">Company Description</label>
+              <label className="form-label">Описание компании</label>
               <textarea 
                 name="description" 
                 value={profileData.description} 
                 onChange={handleChange} 
-                placeholder="Tell candidates about your company's mission and culture..." 
+                placeholder="Расскажите кандидатам о миссии и культуре вашей компании..." 
                 style={{ minHeight: '150px' }} 
               />
             </div>
@@ -185,7 +185,7 @@ const Profile = () => {
             <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1rem' }}>
               <button type="submit" disabled={saving} className="btn btn-primary" style={{ padding: '0.75rem 2rem' }}>
                 {saving ? <Loader2 className="animate-spin" size={18} /> : <Save size={18} />}
-                {saving ? 'Saving...' : 'Save Profile'}
+                {saving ? 'Сохранение...' : 'Сохранить профиль'}
               </button>
             </div>
             

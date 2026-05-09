@@ -34,7 +34,7 @@ const Register = () => {
     e.preventDefault();
     
     if (formData.password !== formData.confirmPassword) {
-      return setError('Passwords do not match');
+      return setError('Пароли не совпадают');
     }
 
     try {
@@ -56,7 +56,7 @@ const Register = () => {
       
       navigate('/dashboard');
     } catch (err) {
-      setError('Failed to create an account. ' + err.message);
+      setError('Не удалось создать аккаунт. ' + err.message);
       console.error(err);
     } finally {
       setLoading(false);
@@ -68,8 +68,8 @@ const Register = () => {
       <div className="glass-panel auth-card animate-fade-in" style={{ maxWidth: '600px', margin: '2rem 0' }}>
         <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
           <Briefcase size={48} color="var(--accent-primary)" style={{ margin: '0 auto', marginBottom: '1rem' }} />
-          <h2 style={{ fontSize: '1.75rem' }}>Create Account</h2>
-          <p className="form-label">Join to find your perfect candidates</p>
+          <h2 style={{ fontSize: '1.75rem' }}>Создать аккаунт</h2>
+          <p className="form-label">Присоединяйтесь, чтобы найти идеальных кандидатов</p>
         </div>
 
         {error && <div className="error-text" style={{ textAlign: 'center', backgroundColor: 'rgba(255, 71, 87, 0.1)', padding: '0.5rem', borderRadius: '4px' }}>{error}</div>}
@@ -77,7 +77,7 @@ const Register = () => {
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
           <div className="grid grid-cols-2">
             <div className="form-group">
-              <label className="form-label">Company Name</label>
+              <label className="form-label">Название компании</label>
               <div style={{ position: 'relative' }}>
                 <Building size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
                 <input 
@@ -89,7 +89,7 @@ const Register = () => {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Company Email</label>
+              <label className="form-label">Email компании</label>
               <div style={{ position: 'relative' }}>
                 <Mail size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
                 <input 
@@ -102,12 +102,12 @@ const Register = () => {
           </div>
 
           <div className="form-group">
-            <label className="form-label">Company Description</label>
+            <label className="form-label">Описание компании</label>
             <div style={{ position: 'relative' }}>
               <FileText size={18} style={{ position: 'absolute', left: '1rem', top: '1rem', color: 'var(--text-muted)' }} />
               <textarea 
                 name="description" required 
-                placeholder="Tell candidates about your company culture, mission, and benefits..." 
+                placeholder="Расскажите кандидатам о корпоративной культуре, миссии и преимуществах..." 
                 value={formData.description} onChange={handleChange}
                 style={{ paddingLeft: '2.75rem', minHeight: '100px', resize: 'vertical' }}
               />
@@ -115,7 +115,7 @@ const Register = () => {
           </div>
           
           <div className="form-group">
-            <label className="form-label">Company Logo (Optional)</label>
+            <label className="form-label">Логотип компании (Опционально)</label>
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
               <label style={{
                 cursor: 'pointer', padding: '0.75rem 1rem', background: 'var(--bg-secondary)', 
@@ -123,7 +123,7 @@ const Register = () => {
                 display: 'flex', alignItems: 'center', gap: '0.5rem', flex: 1, color: 'var(--text-muted)'
               }}>
                 <ImageIcon size={18} />
-                {logoFile ? logoFile.name : 'Upload file...'}
+                {logoFile ? logoFile.name : 'Загрузить файл...'}
                 <input type="file" accept="image/*" onChange={handleFileChange} style={{ display: 'none' }} />
               </label>
             </div>
@@ -131,7 +131,7 @@ const Register = () => {
 
           <div className="grid grid-cols-2">
             <div className="form-group">
-              <label className="form-label">Password</label>
+              <label className="form-label">Пароль</label>
               <div style={{ position: 'relative' }}>
                 <Lock size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
                 <input 
@@ -143,7 +143,7 @@ const Register = () => {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Confirm Password</label>
+              <label className="form-label">Подтвердите пароль</label>
               <div style={{ position: 'relative' }}>
                 <Lock size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
                 <input 
@@ -156,12 +156,12 @@ const Register = () => {
           </div>
 
           <button disabled={loading} type="submit" className="btn btn-primary" style={{ marginTop: '1rem', height: '3rem' }}>
-            {loading ? <Loader2 className="animate-spin" size={20} /> : 'Create Account'}
+            {loading ? <Loader2 className="animate-spin" size={20} /> : 'Создать аккаунт'}
           </button>
         </form>
 
         <div style={{ textAlign: 'center', marginTop: '1rem', fontSize: '0.875rem', color: 'var(--text-muted)' }}>
-          Already have an account? <Link to="/login" style={{ color: 'var(--accent-primary)', textDecoration: 'none', fontWeight: '600' }}>Sign in here</Link>
+          Уже есть аккаунт? <Link to="/login" style={{ color: 'var(--accent-primary)', textDecoration: 'none', fontWeight: '600' }}>Войти здесь</Link>
         </div>
       </div>
     </div>

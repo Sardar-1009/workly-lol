@@ -76,12 +76,12 @@ const Vacancies = () => {
     <div className="animate-fade-in relative h-full">
       <div className="page-header">
         <div>
-          <h1 className="page-title">Vacancies</h1>
-          <p style={{ color: 'var(--text-muted)' }}>Manage your job postings here</p>
+          <h1 className="page-title">Вакансии</h1>
+          <p style={{ color: 'var(--text-muted)' }}>Управляйте вашими вакансиями</p>
         </div>
         <button onClick={() => setShowModal(true)} className="btn btn-primary">
           <Plus size={18} />
-          Post New Vacancy
+          Разместить вакансию
         </button>
       </div>
 
@@ -93,7 +93,7 @@ const Vacancies = () => {
         ) : vacancies.length === 0 ? (
           <div className="glass-panel" style={{ padding: '3rem', textAlign: 'center' }}>
             <Briefcase size={48} color="var(--text-muted)" style={{ margin: '0 auto 1rem', opacity: 0.5 }} />
-            <p style={{ color: 'var(--text-muted)' }}>No vacancies posted yet.</p>
+            <p style={{ color: 'var(--text-muted)' }}>Пока нет созданных вакансий.</p>
           </div>
         ) : (
           <div className="grid grid-cols-2">
@@ -153,7 +153,7 @@ const Vacancies = () => {
             maxHeight: '90vh', overflowY: 'auto'
           }}>
             <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h2 style={{ fontSize: '1.25rem', margin: 0 }}>Create Vacancy</h2>
+              <h2 style={{ fontSize: '1.25rem', margin: 0 }}>Создать вакансию</h2>
               <button onClick={() => setShowModal(false)} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}>
                 <X size={20} />
               </button>
@@ -161,13 +161,13 @@ const Vacancies = () => {
             
             <form onSubmit={handleSubmit} style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <div className="form-group">
-                <label className="form-label">Job Title</label>
-                <input type="text" name="title" required value={formData.title} onChange={handleChange} placeholder="e.g. Senior Frontend Developer" />
+                <label className="form-label">Название должности</label>
+                <input type="text" name="title" required value={formData.title} onChange={handleChange} placeholder="напр. Старший Frontend-разработчик" />
               </div>
               
               <div className="grid grid-cols-2">
                 <div className="form-group">
-                  <label className="form-label">Location (Optional)</label>
+                  <label className="form-label">Локация (Опционально)</label>
                   <select 
                     name="location" 
                     value={formData.location} 
@@ -175,7 +175,7 @@ const Vacancies = () => {
                     className="form-control" 
                     style={{ padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-main)', color: 'var(--text-main)', width: '100%', outline: 'none' }}
                   >
-                    <option value="">Select city...</option>
+                    <option value="">Выберите город...</option>
                     <option value="Бишкек">Бишкек</option>
                     <option value="Ош">Ош</option>
                     <option value="Джалал-Абад">Джалал-Абад</option>
@@ -190,36 +190,36 @@ const Vacancies = () => {
                   </select>
                 </div>
                 <div className="form-group">
-                  <label className="form-label">Salary Range (Optional)</label>
-                  <input type="text" name="salary" value={formData.salary} onChange={handleChange} placeholder="e.g. $80k - $120k" />
+                  <label className="form-label">Зарплатная вилка (Опционально)</label>
+                  <input type="text" name="salary" value={formData.salary} onChange={handleChange} placeholder="напр. 80 000 сом - 120 000 сом" />
                 </div>
               </div>
 
               <div className="form-group">
-                <label className="form-label">Work Type</label>
+                <label className="form-label">Тип занятости</label>
                 <select name="workType" value={formData.workType} onChange={handleChange} className="form-control" style={{ padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-main)', color: 'var(--text-main)', width: '100%', outline: 'none' }}>
-                  <option value="full-time">Full-time</option>
-                  <option value="part-time">Part-time</option>
-                  <option value="contract">Contract</option>
-                  <option value="freelance">Freelance</option>
-                  <option value="internship">Internship</option>
+                  <option value="full-time">Полная занятость</option>
+                  <option value="part-time">Частичная занятость</option>
+                  <option value="contract">Контракт</option>
+                  <option value="freelance">Фриланс</option>
+                  <option value="internship">Стажировка</option>
                 </select>
               </div>
 
               <div className="form-group">
-                <label className="form-label">Description</label>
-                <textarea name="description" required value={formData.description} onChange={handleChange} placeholder="Describe the role..." style={{ minHeight: '100px' }} />
+                <label className="form-label">Описание</label>
+                <textarea name="description" required value={formData.description} onChange={handleChange} placeholder="Опишите роль..." style={{ minHeight: '100px' }} />
               </div>
 
               <div className="form-group">
-                <label className="form-label">Skills (comma separated)</label>
+                <label className="form-label">Навыки (через запятую)</label>
                 <textarea name="skills" required value={formData.skills} onChange={handleChange} placeholder="React, Node.js, Firebase, UI/UX" style={{ minHeight: '60px' }} />
               </div>
 
               <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1rem' }}>
-                <button type="button" onClick={() => setShowModal(false)} className="btn btn-secondary">Cancel</button>
+                <button type="button" onClick={() => setShowModal(false)} className="btn btn-secondary">Отмена</button>
                 <button type="submit" disabled={creating} className="btn btn-primary">
-                  {creating ? <Loader2 className="animate-spin" size={18} /> : 'Publish Vacancy'}
+                  {creating ? <Loader2 className="animate-spin" size={18} /> : 'Опубликовать вакансию'}
                 </button>
               </div>
             </form>

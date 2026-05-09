@@ -137,11 +137,11 @@ const Messages = () => {
     <div className="animate-fade-in relative h-full flex flex-col" style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 8rem)' }}>
       <div className="page-header" style={{ flexShrink: 0 }}>
         <div>
-          <h1 className="page-title">Messages</h1>
-          <p style={{ color: 'var(--text-muted)' }}>Chat with matched candidates</p>
+          <h1 className="page-title">Сообщения</h1>
+          <p style={{ color: 'var(--text-muted)' }}>Общайтесь с кандидатами</p>
         </div>
         <button onClick={fetchChats} className="btn btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <RefreshCw size={16} /> Refresh
+          <RefreshCw size={16} /> Обновить
         </button>
       </div>
 
@@ -149,7 +149,7 @@ const Messages = () => {
         {/* Chats Sidebar */}
         <div className="glass-panel" style={{ width: '320px', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
           <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--border-color)' }}>
-            <h3 style={{ fontSize: '1.1rem', margin: 0 }}>Active Chats</h3>
+            <h3 style={{ fontSize: '1.1rem', margin: 0 }}>Активные чаты</h3>
           </div>
 
           <div style={{ overflowY: 'auto', flex: 1 }}>
@@ -159,7 +159,7 @@ const Messages = () => {
               </div>
             ) : chats.length === 0 ? (
               <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', padding: '2rem', textAlign: 'center' }}>
-                No conversations yet. Go to <strong>Candidates</strong> and click <strong>Message</strong> to start a chat.
+                Пока нет диалогов. Перейдите в раздел <strong>Кандидаты</strong> и нажмите <strong>Сообщение</strong>, чтобы начать чат.
               </p>
             ) : (
               chats.map(chat => {
@@ -186,10 +186,10 @@ const Messages = () => {
                       </div>
                       <div style={{ overflow: 'hidden' }}>
                         <h4 style={{ margin: 0, fontSize: '0.95rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                          {candidate?.fullName || candidate?.name || 'Unknown Candidate'}
+                          {candidate?.fullName || candidate?.name || 'Неизвестный кандидат'}
                         </h4>
                         <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-muted)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                          {chat.lastMessage || 'Started a conversation'}
+                          {chat.lastMessage || 'Диалог начат'}
                         </p>
                       </div>
                     </div>
@@ -205,7 +205,7 @@ const Messages = () => {
           {!activeChatId ? (
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flex: 1, opacity: 0.5 }}>
               <MessageSquareText size={48} color="var(--text-muted)" style={{ marginBottom: '1rem' }} />
-              <p style={{ color: 'var(--text-muted)' }}>Select a chat to start messaging</p>
+              <p style={{ color: 'var(--text-muted)' }}>Выберите чат для начала общения</p>
             </div>
           ) : (
             <>
@@ -217,7 +217,7 @@ const Messages = () => {
                     : <User size={20} color="var(--text-muted)" />}
                 </div>
                 <div>
-                  <h3 style={{ margin: 0, fontSize: '1.1rem' }}>{activeCandidate?.fullName || activeCandidate?.name || 'Unknown Candidate'}</h3>
+                  <h3 style={{ margin: 0, fontSize: '1.1rem' }}>{activeCandidate?.fullName || activeCandidate?.name || 'Неизвестный кандидат'}</h3>
                   <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-muted)' }}>{activeCandidate?.email || ''}</p>
                 </div>
               </div>
@@ -230,7 +230,7 @@ const Messages = () => {
                   </div>
                 ) : messages.length === 0 ? (
                   <p style={{ textAlign: 'center', color: 'var(--text-muted)', marginTop: 'auto', marginBottom: 'auto' }}>
-                    No messages yet. Say hello! 👋
+                    Пока нет сообщений. Поздоровайтесь! 👋
                   </p>
                 ) : (
                   messages.map(msg => {
@@ -263,7 +263,7 @@ const Messages = () => {
                 <form onSubmit={handleSendMessage} style={{ display: 'flex', gap: '1rem' }}>
                   <input
                     type="text"
-                    placeholder="Type your message..."
+                    placeholder="Введите сообщение..."
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
                     style={{ flex: 1, borderRadius: 'var(--radius-full)' }}

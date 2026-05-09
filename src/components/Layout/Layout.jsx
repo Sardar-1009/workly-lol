@@ -29,23 +29,23 @@ const Layout = () => {
           <nav className="nav-links" style={{ marginTop: '3rem' }}>
             <NavLink to="/dashboard" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
               <LayoutDashboard size={20} />
-              <span>Dashboard</span>
+              <span>Главная</span>
             </NavLink>
             <NavLink to="/vacancies" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
               <Briefcase size={20} />
-              <span>Vacancies</span>
+              <span>Вакансии</span>
             </NavLink>
             <NavLink to="/candidates" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
               <Users size={20} />
-              <span>Candidates</span>
+              <span>Кандидаты</span>
             </NavLink>
             <NavLink to="/messages" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
               <MessageSquareText size={20} />
-              <span>Messages</span>
+              <span>Сообщения</span>
             </NavLink>
             <NavLink to="/profile" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
               <User size={20} />
-              <span>Profile</span>
+              <span>Профиль</span>
             </NavLink>
           </nav>
         </div>
@@ -56,7 +56,7 @@ const Layout = () => {
           style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left', cursor: 'pointer', marginTop: 'auto' }}
         >
           <LogOut size={20} color="var(--accent-primary)" />
-          <span style={{ color: 'var(--accent-primary)' }}>Log Out</span>
+          <span style={{ color: 'var(--accent-primary)' }}>Выйти</span>
         </button>
       </aside>
 
