@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { db } from '../../config/firebase';
-import { collection, query, where, getDocs, addDoc, serverTimestamp, orderBy } from 'firebase/firestore';
-import { Plus, X, Briefcase, MapPin, DollarSign, Loader2 } from 'lucide-react';
+import { collection, query, where, getDocs, addDoc, serverTimestamp, updateDoc, doc } from 'firebase/firestore';
+import { Plus, X, Briefcase, MapPin, DollarSign, Loader2, Trash2, AlertTriangle } from 'lucide-react';
 
 const Vacancies = () => {
   const { currentUser } = useAuth();
@@ -12,6 +12,8 @@ const Vacancies = () => {
   // Modal State
   const [showModal, setShowModal] = useState(false);
   const [creating, setCreating] = useState(false);
+  const [confirmDeleteId, setConfirmDeleteId] = useState(null);
+  const [deleting, setDeleting] = useState(false);
   
   // Form State
   const [formData, setFormData] = useState({
@@ -32,7 +34,9 @@ const Vacancies = () => {
         // orderBy('createdAt', 'desc') // Requires composite index to use with where, doing client sort instead
       );
       const querySnapshot = await getDocs(q);
-      const fetched = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const fetched = querySnapshot.docs
+        .map(doc => ({ id: doc.id, ...doc.data() }))
+        .filter(v => v.status !== 'deleted');
       // Client-side sort fallback
       fetched.sort((a, b) => (b.createdAt?.toMillis?.() || 0) - (a.createdAt?.toMillis?.() || 0));
       setVacancies(fetched);
@@ -72,6 +76,20 @@ const Vacancies = () => {
     }
   };
 
+  const handleDeleteVacancy = async () => {
+    if (!confirmDeleteId) return;
+    setDeleting(true);
+    try {
+      await updateDoc(doc(db, 'vacancies', confirmDeleteId), { status: 'deleted' });
+      setVacancies(prev => prev.filter(v => v.id !== confirmDeleteId));
+    } catch (error) {
+      console.error('Ошибка при удалении вакансии:', error);
+    } finally {
+      setDeleting(false);
+      setConfirmDeleteId(null);
+    }
+  };
+
   return (
     <div className="animate-fade-in relative h-full">
       <div className="page-header">
@@ -98,22 +116,38 @@ const Vacancies = () => {
         ) : (
           <div className="grid grid-cols-2">
             {vacancies.map(vacancy => (
-              <div key={vacancy.id} className="glass-panel" style={{ padding: '1.5rem', transition: 'transform var(--transition-fast)' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                  <h3 style={{ fontSize: '1.25rem' }}>{vacancy.title}</h3>
-                  <span style={{ 
-                    padding: '0.25rem 0.75rem', 
-                    borderRadius: '1rem', 
-                    fontSize: '0.75rem', 
-                    fontWeight: 600,
-                    backgroundColor: vacancy.status === 'active' ? 'rgba(76, 209, 55, 0.1)' : 'rgba(255, 71, 87, 0.1)',
-                    color: vacancy.status === 'active' ? '#4cd137' : 'var(--accent-primary)'
-                  }}>
-                    {vacancy.status.toUpperCase()}
-                  </span>
+              <div key={vacancy.id} className="glass-panel" style={{ padding: '1.5rem', transition: 'transform var(--transition-fast)', position: 'relative' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '0.75rem' }}>
+                  <h3 style={{ fontSize: '1.25rem', margin: 0, flex: 1 }}>{vacancy.title}</h3>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexShrink: 0 }}>
+                    <span style={{
+                      padding: '0.25rem 0.75rem',
+                      borderRadius: '1rem',
+                      fontSize: '0.75rem',
+                      fontWeight: 600,
+                      backgroundColor: vacancy.status === 'active' ? 'rgba(76, 209, 55, 0.1)' : 'rgba(255, 71, 87, 0.1)',
+                      color: vacancy.status === 'active' ? '#4cd137' : 'var(--accent-primary)'
+                    }}>
+                      {vacancy.status === 'active' ? 'Активна' : vacancy.status.toUpperCase()}
+                    </span>
+                    <button
+                      title="Удалить вакансию"
+                      onClick={() => setConfirmDeleteId(vacancy.id)}
+                      style={{
+                        background: 'none', border: 'none', cursor: 'pointer',
+                        color: 'var(--text-muted)', padding: '0.25rem',
+                        borderRadius: '0.25rem', transition: 'color 0.15s',
+                        display: 'flex', alignItems: 'center',
+                      }}
+                      onMouseEnter={e => e.currentTarget.style.color = '#ff4757'}
+                      onMouseLeave={e => e.currentTarget.style.color = 'var(--text-muted)'}
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
                 </div>
-                
-                <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '0.5rem', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+
+                <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '0.75rem', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                   {vacancy.description}
                 </p>
 
@@ -223,6 +257,45 @@ const Vacancies = () => {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Confirm Delete Modal */}
+      {confirmDeleteId && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+          backgroundColor: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(4px)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100,
+        }}>
+          <div className="glass-panel animate-fade-in" style={{
+            width: '100%', maxWidth: '420px', padding: '2rem',
+            backgroundColor: 'var(--bg-secondary)', textAlign: 'center',
+          }}>
+            <AlertTriangle size={48} color="#f39c12" style={{ margin: '0 auto 1rem' }} />
+            <h3 style={{ fontSize: '1.25rem', marginBottom: '0.75rem' }}>Удалить вакансию?</h3>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '1.75rem', lineHeight: 1.6 }}>
+              Вакансия исчезнет из ленты соискателей и вашего списка.
+              Все уже поданные отклики <strong>сохранятся</strong> в истории кандидатов.
+            </p>
+            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+              <button
+                onClick={() => setConfirmDeleteId(null)}
+                className="btn btn-secondary"
+                style={{ minWidth: '120px' }}
+                disabled={deleting}
+              >
+                Отмена
+              </button>
+              <button
+                onClick={handleDeleteVacancy}
+                className="btn"
+                style={{ minWidth: '120px', backgroundColor: 'rgba(255,71,87,0.15)', color: '#ff4757', border: '1px solid rgba(255,71,87,0.3)' }}
+                disabled={deleting}
+              >
+                {deleting ? <Loader2 className="animate-spin" size={18} /> : <><Trash2 size={16} /> Удалить</>}
+              </button>
+            </div>
           </div>
         </div>
       )}

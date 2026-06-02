@@ -38,9 +38,12 @@ const Dashboard = () => {
           getDocs(query(collection(db, 'applications'), where('employerId', '==', currentUser.uid))),
           getDocs(query(collection(db, 'chats'), where('employerId', '==', currentUser.uid))),
         ]);
+        
+        const activeApps = appSnap.docs.filter(doc => doc.data().status !== 'dismissed');
+        
         setStats({
           vacancies: vacSnap.size,
-          candidates: appSnap.size,
+          candidates: activeApps.length,
           chats: chatSnap.size,
         });
       } catch (err) {

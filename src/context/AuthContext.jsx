@@ -53,8 +53,21 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      // You could fetch employer doc here to append to user if needed
-      setCurrentUser(user);
+      if (user) {
+        // Fetch employer profile and merge into the user object
+        try {
+          const employerDoc = await getDoc(doc(db, 'employers', user.uid));
+          if (employerDoc.exists()) {
+            setCurrentUser({ ...user, employerProfile: employerDoc.data() });
+          } else {
+            setCurrentUser(user);
+          }
+        } catch {
+          setCurrentUser(user);
+        }
+      } else {
+        setCurrentUser(null);
+      }
       setLoading(false);
     });
 

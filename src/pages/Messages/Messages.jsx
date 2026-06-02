@@ -6,7 +6,7 @@ import {
   collection, query, where, getDocs, getDoc,
   doc, addDoc, updateDoc, serverTimestamp, onSnapshot
 } from 'firebase/firestore';
-import { Send, User, Loader2, MessageSquareText, RefreshCw } from 'lucide-react';
+import { Send, User, Loader2, MessageSquareText, RefreshCw, Building } from 'lucide-react';
 
 const Messages = () => {
   const { currentUser } = useAuth();
@@ -210,15 +210,30 @@ const Messages = () => {
           ) : (
             <>
               {/* Chat Header */}
-              <div style={{ padding: '1rem 1.5rem', borderBottom: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', gap: '1rem', backgroundColor: 'var(--bg-card)' }}>
-                <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: 'var(--bg-main)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-                  {activeCandidate?.photoUrl
-                    ? <img src={activeCandidate.photoUrl} alt="candidate" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                    : <User size={20} color="var(--text-muted)" />}
+              <div style={{ padding: '1rem 1.5rem', borderBottom: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', backgroundColor: 'var(--bg-card)' }}>
+                {/* Candidate info (left) */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                  <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: 'var(--bg-main)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+                    {activeCandidate?.photoUrl
+                      ? <img src={activeCandidate.photoUrl} alt="candidate" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      : <User size={20} color="var(--text-muted)" />}
+                  </div>
+                  <div>
+                    <h3 style={{ margin: 0, fontSize: '1.1rem' }}>{activeCandidate?.fullName || activeCandidate?.name || 'Неизвестный кандидат'}</h3>
+                    <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-muted)' }}>{activeCandidate?.email || ''}</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 style={{ margin: 0, fontSize: '1.1rem' }}>{activeCandidate?.fullName || activeCandidate?.name || 'Неизвестный кандидат'}</h3>
-                  <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-muted)' }}>{activeCandidate?.email || ''}</p>
+                {/* Employer company info (right) */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.5rem 1rem', borderRadius: 'var(--radius-md)', backgroundColor: 'rgba(255,255,255,0.04)', border: '1px solid var(--border-color)' }}>
+                  <div style={{ width: '36px', height: '36px', borderRadius: '8px', backgroundColor: 'var(--bg-main)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
+                    {currentUser?.employerProfile?.logo
+                      ? <img src={currentUser.employerProfile.logo} alt="logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      : <Building size={18} color="var(--text-muted)" />}
+                  </div>
+                  <div>
+                    <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--text-muted)' }}>Вы</p>
+                    <p style={{ margin: 0, fontSize: '0.9rem', fontWeight: 600 }}>{currentUser?.employerProfile?.companyName || 'Компания'}</p>
+                  </div>
                 </div>
               </div>
 

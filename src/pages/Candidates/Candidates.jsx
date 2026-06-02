@@ -30,18 +30,21 @@ const Candidates = () => {
       const appSnapshot = await getDocs(q);
       const fetchedApps = appSnapshot.docs.map(d => ({ id: d.id, ...d.data() }));
 
-      // Client sort by newest
-      fetchedApps.sort((a, b) => (b.createdAt?.toMillis?.() || 0) - (a.createdAt?.toMillis?.() || 0));
-      setApplications(fetchedApps);
+      // Filter out dismissed applications
+      const activeApps = fetchedApps.filter(app => app.status !== 'dismissed');
 
-      if (fetchedApps.length === 0) {
+      // Client sort by newest
+      activeApps.sort((a, b) => (b.createdAt?.toMillis?.() || 0) - (a.createdAt?.toMillis?.() || 0));
+      setApplications(activeApps);
+
+      if (activeApps.length === 0) {
         setLoading(false);
         return;
       }
 
       // 2. Extract unique candidate and vacancy IDs
-      const userIds = [...new Set(fetchedApps.map(app => app.userId))].filter(Boolean);
-      const vacancyIds = [...new Set(fetchedApps.map(app => app.vacancyId))].filter(Boolean);
+      const userIds = [...new Set(activeApps.map(app => app.userId))].filter(Boolean);
+      const vacancyIds = [...new Set(activeApps.map(app => app.vacancyId))].filter(Boolean);
 
       // 3. Fetch candidates (assuming they are stored in 'users' collection)
       const candidatesData = {};
@@ -93,7 +96,7 @@ const Candidates = () => {
   const handleDismissCandidate = async (appId) => {
     setUpdating(true);
     try {
-      await updateDoc(doc(db, 'applications', appId), { status: 'rejected' });
+      await updateDoc(doc(db, 'applications', appId), { status: 'dismissed' });
       setApplications(apps => apps.filter(app => app.id !== appId));
       if (selectedApp?.id === appId) {
         setSelectedApp(null);
@@ -117,14 +120,23 @@ const Candidates = () => {
       const chatSnapshot = await getDocs(chatQuery);
 
       if (!chatSnapshot.empty) {
-        // Redirect to existing chat
-        const existingChatId = chatSnapshot.docs[0].id;
-        navigate(`/messages?chat=${existingChatId}`);
+        // Redirect to existing chat — also patch companyName/logo if missing
+        const existingChat = chatSnapshot.docs[0];
+        const existingData = existingChat.data();
+        if (!existingData.companyName && currentUser.employerProfile?.companyName) {
+          await updateDoc(doc(db, 'chats', existingChat.id), {
+            companyName: currentUser.employerProfile.companyName,
+            companyLogo: currentUser.employerProfile.logo || '',
+          });
+        }
+        navigate(`/messages?chat=${existingChat.id}`);
       } else {
-        // Create new chat
+        // Create new chat — include employer company info for mobile app
         const newChatRef = await addDoc(collection(db, 'chats'), {
           employerId: currentUser.uid,
           userId: userId,
+          companyName: currentUser.employerProfile?.companyName || '',
+          companyLogo: currentUser.employerProfile?.logo || '',
           lastMessage: '',
           lastMessageTime: serverTimestamp(),
           createdAt: serverTimestamp()
@@ -308,7 +320,7 @@ const Candidates = () => {
               </button>
             </div>
 
-            <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.5rem', maxHeight: '50vh', overflowY: 'auto' }}>
+            <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.5rem', maxHeight: '60vh', overflowY: 'auto' }}>
               <div>
                 <h4 style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: '0.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Mail size={14} /> Почта</h4>
                 <p>{candidates[selectedApp.userId].email || 'Почта не указана'}</p>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { db, storage } from '../../config/firebase';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, getDocs, collection, query, where, updateDoc } from 'firebase/firestore';
 import { Loader2, Save, Upload, Building } from 'lucide-react';
 
 const Profile = () => {
@@ -87,7 +87,25 @@ const Profile = () => {
       
       // Use setDoc with merge: true in case the document doesn't exist yet
       await setDoc(doc(db, 'employers', currentUser.uid), updateData, { merge: true });
-      
+
+      // Sync companyName + companyLogo to all existing chats of this employer
+      // so Flutter mobile app shows correct branding immediately
+      try {
+        const chatsSnap = await getDocs(
+          query(collection(db, 'chats'), where('employerId', '==', currentUser.uid))
+        );
+        await Promise.all(
+          chatsSnap.docs.map(chatDoc =>
+            updateDoc(doc(db, 'chats', chatDoc.id), {
+              companyName: updateData.companyName,
+              companyLogo: updateData.logo || '',
+            })
+          )
+        );
+      } catch (syncErr) {
+        console.warn('Чаты не обновлены:', syncErr);
+      }
+
       setProfileData(prev => ({ ...prev, ...updateData }));
       setSuccessMsg('Профиль успешно обновлен!');
       setTimeout(() => setSuccessMsg(''), 3000);
